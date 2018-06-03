@@ -22,10 +22,30 @@ int total_vertices(char* in_file) {
     return num_lines;
 }
 
+std::vector<vertex> read_vertices(char* in_file) {
+    FILE *fin;
+    fin = fopen (in_file, "r");
+    assert(fin);
+
+    std::vector<vertex> vertices;
+    int x, y;
+
+    while(fscanf( fin, " %*d %d %d\n", &x, &y) == 2) {
+        vertices.push_back(vertex{x, y});
+    }
+
+    return vertices;
+}
+
 struct tsp_problem read_problem(char* in_file) {
     struct tsp_problem new_problem;
     
-    printf("%d\n", total_vertices(in_file));
+    new_problem.vertices = read_vertices(in_file);
 
+    for (int i = 0; i < new_problem.vertices.size(); ++i) {
+        printf("%d, %d\n", new_problem.vertices[i].x, new_problem.vertices[i].y);
+    }
+    
+    printf("length: %d\n", (int) new_problem.vertices.size());
     return new_problem;
 }

@@ -1,8 +1,9 @@
 #ifndef UTILS_HPP
 #define UTILS_HPP
 
+#include <vector>
+
 struct vertex {
-    int id;
     int x, y;
 };
 
@@ -13,8 +14,8 @@ struct edge {
 };
 
 struct tsp_problem {
-    struct vertex *vertices;
-    struct edge *edges;
+    std::vector<vertex> vertices;
+    std::vector<edge> edges;
 };
 
 struct tsp_problem read_problem(char* in_file);
