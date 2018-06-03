@@ -12,7 +12,7 @@ int main(int argc, char** argv) {
 
     char* in_file = argv[1];
 
-    printf("Reading file: %s\n", in_file);
+    read_problem(in_file);
 
     return 0;
 }

@@ -15,6 +15,8 @@ struct edge {
 struct tsp_problem {
     struct vertex *vertices;
     struct edge *edges;
-}
+};
+
+struct tsp_problem read_problem(char* in_file);
 
 #endif
