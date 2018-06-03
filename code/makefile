@@ -17,7 +17,7 @@ $(OBJ_DIR):
 
 .PHONY=clean run
 
-run:
+run: tsp.out data/tsp_example_1.txt
 	./tsp.out data/tsp_example_1.txt
 
 clean:
