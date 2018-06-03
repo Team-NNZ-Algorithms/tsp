@@ -7,7 +7,7 @@ SRC_FILES := $(wildcard $(SRC_DIR)/*.cpp)
 OBJ_FILES := $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SRC_FILES))
 
 tsp.out: tsp.cpp $(OBJ_FILES) 
-	$(CC) $(CFLAGS) $< -o $@
+	$(CC) $(CFLAGS) $^ -o $@
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp $(SRC_DIR)/%.hpp $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -15,7 +15,10 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp $(SRC_DIR)/%.hpp $(OBJ_DIR)
 $(OBJ_DIR):
 	 mkdir -p $@
 
-.PHONY=clean
+.PHONY=clean run
+
+run:
+	./tsp.out data/tsp_example_1.txt
 
 clean:
 	rm -Rf bin/
