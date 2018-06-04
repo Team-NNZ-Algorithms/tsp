@@ -4,6 +4,7 @@
 #include <vector>
 
 struct vertex {
+    int id;
     int x, y;
 };
 
