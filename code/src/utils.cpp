@@ -5,7 +5,7 @@
 #include <assert.h>
 
 int vertex_distance(const struct vertex &start, const struct vertex &end) {
-    return round(sqrt((start.x - end.x)^2 + (start.y - end.y)^2));
+    return round(sqrt((start.x - end.x)*(start.x - end.x) + (start.y - end.y)*(start.y - end.y)));
 }
 
 int total_vertices(char* in_file) {
@@ -59,15 +59,5 @@ struct tsp_problem read_problem(char* in_file) {
     new_problem.vertices = read_vertices(in_file);
     new_problem.edges = generate_edges(new_problem.vertices);
 
-    // for (int i = 0; i < new_problem.vertices.size(); ++i) {
-    //     printf("%d, %d\n", new_problem.vertices[i].x, new_problem.vertices[i].y);
-    // }
-
-    // for (int i = 0; i < new_problem.edges.size(); ++i) {
-    //     printf("%d, %d\n", new_problem.edges[i].start->id, new_problem.edges[i].end->id);
-    // }
-    
-    printf("vertices: %d\n", (int) new_problem.vertices.size());
-    printf("edges: %d\n", (int) new_problem.edges.size());
     return new_problem;
 }

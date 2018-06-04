@@ -12,7 +12,18 @@ int main(int argc, char** argv) {
 
     char* in_file = argv[1];
 
-    read_problem(in_file);
+    struct tsp_problem problem = read_problem(in_file);
+
+    for (int i = 0; i < problem.vertices.size(); ++i) {
+        printf("%d, %d\n", problem.vertices[i].x, problem.vertices[i].y);
+    }
+
+    for (int i = 0; i < problem.edges.size(); ++i) {
+        printf("%d, %d, %d\n", problem.edges[i].start->id, problem.edges[i].end->id, problem.edges[i].weight);
+    }
+    
+    printf("vertices: %d\n", (int) problem.vertices.size());
+    printf("edges: %d\n", (int) problem.edges.size());
 
     return 0;
 }
