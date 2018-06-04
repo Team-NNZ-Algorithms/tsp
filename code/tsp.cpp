@@ -14,6 +14,8 @@ int main(int argc, char** argv) {
 
     struct tsp_problem problem = read_problem(in_file);
 
+    sort_edges(problem.edges);
+
     for (int i = 0; i < problem.vertices.size(); ++i) {
         printf("%d, %d\n", problem.vertices[i].x, problem.vertices[i].y);
     }
