@@ -3,6 +3,8 @@
 
 #include <vector>
 
+int vertex_distance(const struct vertex &start, const struct vertex &end);
+
 struct vertex {
     int id;
     int x, y;
@@ -15,8 +17,8 @@ struct edge {
 };
 
 struct tour {
-  std::vector<int> cities;
-  int cost;
+  std::vector<vertex> cities;
+  int distance;
   int numEdges;
 };
 
