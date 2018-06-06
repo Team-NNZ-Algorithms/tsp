@@ -14,17 +14,15 @@ int main(int argc, char** argv) {
 
     struct tsp_problem problem = read_problem(in_file);
 
-    sort_edges(problem.edges);
-
-    for (int i = 0; i < problem.vertices.size(); ++i) {
-        printf("%d, %d\n", problem.vertices[i].x, problem.vertices[i].y);
+    for (int i = 0; i < problem.cities.size(); ++i) {
+        printf("%d, %d\n", problem.cities[i].x, problem.cities[i].y);
     }
 
     for (int i = 0; i < problem.edges.size(); ++i) {
         printf("%d, %d, %d\n", problem.edges[i].start->id, problem.edges[i].end->id, problem.edges[i].weight);
     }
     
-    printf("vertices: %d\n", (int) problem.vertices.size());
+    printf("cities: %d\n", (int) problem.cities.size());
     printf("edges: %d\n", (int) problem.edges.size());
 
     return 0;

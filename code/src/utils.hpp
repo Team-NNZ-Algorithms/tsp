@@ -3,27 +3,29 @@
 
 #include <vector>
 
-int vertex_distance(const struct vertex &start, const struct vertex &end);
+int city_distance(const struct city &start, const struct city &end);
 
-struct vertex {
+struct edge;
+
+struct city {
     int id;
     int x, y;
+    std::vector<edge> edges;
 };
 
 struct edge {
-    struct vertex *start;
-    struct vertex *end;
+    struct city *start;
+    struct city *end;
     int weight;
 };
 
 struct tour {
-  std::vector<vertex> cities;
+  std::vector<city> cities;
   int distance;
-  int numEdges;
 };
 
 struct tsp_problem {
-    std::vector<vertex> vertices;
+    std::vector<city> cities;
     std::vector<edge> edges;
 };
 

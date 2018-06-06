@@ -1,14 +1,15 @@
 #include "utils.hpp"
+#include "sort.hpp"
 
 #include <cmath>
 #include <stdio.h>
 #include <assert.h>
 
-int vertex_distance(const struct vertex &start, const struct vertex &end) {
+int city_distance(const struct city &start, const struct city &end) {
     return round(sqrt((start.x - end.x)*(start.x - end.x) + (start.y - end.y)*(start.y - end.y)));
 }
 
-int total_vertices(char* in_file) {
+int total_cities(char* in_file) {
     FILE *fin;
     fin = fopen (in_file, "r");
     assert(fin);
@@ -22,30 +23,30 @@ int total_vertices(char* in_file) {
     return num_lines;
 }
 
-std::vector<vertex> read_vertices(char* in_file) {
+std::vector<city> read_cities(char* in_file) {
     FILE *fin;
     fin = fopen (in_file, "r");
     assert(fin);
 
-    std::vector<vertex> vertices;
+    std::vector<city> cities;
     int id, x, y;
 
     while(fscanf( fin, " %d %d %d\n", &id, &x, &y) == 3) {
-        vertices.push_back(vertex{id, x, y});
+        cities.push_back(city{id, x, y});
     }
 
-    return vertices;
+    return cities;
 }
 
-std::vector<edge> generate_edges(std::vector<vertex> &vertices) {
+std::vector<edge> generate_edges(std::vector<city> &cities) {
     std::vector<edge> edges;
     
-    for(int i = 0; i < vertices.size(); ++i) {
-        for(int j = i + 1; j < vertices.size(); ++j) {
+    for(int i = 0; i < cities.size(); ++i) {
+        for(int j = i + 1; j < cities.size(); ++j) {
             edges.push_back(edge{
-                &vertices[i],
-                &vertices[j],
-                vertex_distance(vertices[i], vertices[j])
+                &cities[i],
+                &cities[j],
+                city_distance(cities[i], cities[j])
             });
         }
     }
@@ -56,8 +57,15 @@ std::vector<edge> generate_edges(std::vector<vertex> &vertices) {
 struct tsp_problem read_problem(char* in_file) {
     struct tsp_problem new_problem;
     
-    new_problem.vertices = read_vertices(in_file);
-    new_problem.edges = generate_edges(new_problem.vertices);
+    new_problem.cities = read_cities(in_file);
+    new_problem.edges = generate_edges(new_problem.cities);
+
+    sort_edges(new_problem.edges);
+
+    for(struct edge &e: new_problem.edges) {
+        e.start->edges.push_back(e);
+        e.end->edges.push_back(e);
+    }
 
     return new_problem;
 }

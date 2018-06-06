@@ -46,7 +46,7 @@ struct tour swap(struct tour tour, int i, int k)
 
   // Calculate the new tour's distance
   for (int l = 0; l < newTour.cities.size() - 1; l++)
-    newDistance += vertex_distance(newTour.cities[l], newTour.cities[l+1]);
+    newDistance += city_distance(newTour.cities[l], newTour.cities[l+1]);
 
   newTour.distance = newDistance;
   
