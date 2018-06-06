@@ -14,7 +14,7 @@ struct edge {
     int weight;
 };
 
-struct path {
+struct tour {
   std::vector<int> cities;
   int cost;
   int numEdges;
