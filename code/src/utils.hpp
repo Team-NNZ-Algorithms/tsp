@@ -14,6 +14,12 @@ struct edge {
     int weight;
 };
 
+struct path {
+  std::vector<int> cities;
+  int cost;
+  int numEdges;
+};
+
 struct tsp_problem {
     std::vector<vertex> vertices;
     std::vector<edge> edges;
