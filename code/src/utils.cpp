@@ -58,7 +58,6 @@ struct tsp_problem read_problem(char* in_file) {
     int num_cities = total_cities(in_file);
     struct tsp_problem new_problem(num_cities);
     
-
     new_problem.cities = read_cities(in_file);
     new_problem.edges = generate_edges(new_problem.cities);
 
@@ -73,8 +72,19 @@ struct tsp_problem read_problem(char* in_file) {
 }
 
 
-void add_edge_to_tour(struct tour &tour, struct edge &edge) {
-    assert(edge.start->id == tour.cities.back()->id);
-    tour.cities.push_back(edge.end);
-    tour.distance = tour.distance + edge.weight;
+void add_edge_to_tour(struct tour &tour, struct city* next_city, int distance) {
+    // TODO: adjust this to handle connecting the last city to the first city
+
+    assert(next_city->id != tour.cities.back()->id);
+    tour.cities.push_back(next_city);
+    tour.distance += distance;
+}
+
+void print_tour(struct tour &tour) {
+
+    for (const city *c : tour.cities) {
+        printf("city: %d\n", c->id);
+    }
+
+    printf("distance: %d\n\n", tour.distance);
 }

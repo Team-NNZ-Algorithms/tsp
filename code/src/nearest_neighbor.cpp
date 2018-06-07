@@ -2,14 +2,14 @@
 
 // adapted from https://en.wikipedia.org/wiki/Nearest_neighbour_algorithm
 // asssuming that edges in the problem are already sorted!!!
-struct tour tsp_nearest_neighbor(struct tsp_problem &problem) {
+struct tour tsp_nearest_neighbor( struct tsp_problem &problem ) {
     struct tour best_tour;
 
     // we will test greedy tours at every starting point
     for( struct city &start : problem.cities ) {
 
         // this will provide constant time access to see which cities have been visited
-        std::vector<bool> current_visited(problem.cities.size());
+        std::vector<bool> current_visited(problem.cities.size(), false);
 
         // create a new tour and add the first city
         struct tour* current_tour = new struct tour;
@@ -25,22 +25,29 @@ struct tour tsp_nearest_neighbor(struct tsp_problem &problem) {
 
             // look through the edges for the current city, which are already sorted
             for ( const struct edge &e : *current_edges ) {
-              
+                struct city* next_city;
+
+                if ( e.start->id != current_city->id ) {
+                    next_city = e.start;
+                }
+                else {
+                    next_city = e.end;
+                }
+
                 // if the end isn't visited, visit the end
-                if ( !current_visited[e.end->id] ) {
-                    add_edge_to_tour(*current_tour, e);
-                    current_visited[e.end->id] = true;
+                if ( !current_visited[next_city->id] ) {
+                    add_edge_to_tour(*current_tour, next_city, e.weight);
+                    current_visited[next_city->id] = true;
                     break;
                 }
             }
-
-            delete current_city;
         }
 
-        // TODO: need to handle add going back to the start?
+        print_tour(*current_tour);
 
         // change best_tour if this current tour is better.
         if( current_tour->distance < best_tour.distance ) {
+            print_tour(*current_tour);
             best_tour = *current_tour;
         }
 
@@ -48,5 +55,4 @@ struct tour tsp_nearest_neighbor(struct tsp_problem &problem) {
     }
 
     return best_tour;
-
 }
