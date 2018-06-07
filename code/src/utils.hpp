@@ -20,15 +20,21 @@ struct edge {
 };
 
 struct tour {
-  std::vector<city> cities;
+  std::vector<city*> cities;
   int distance;
 };
 
 struct tsp_problem {
     std::vector<city> cities;
     std::vector<edge> edges;
+
+    tsp_problem(int num_cities) {
+        cities.reserve(num_cities);
+        edges.reserve(num_cities * num_cities - num_cities);
+    }
 };
 
 struct tsp_problem read_problem(char* in_file);
+void add_edge_to_tour(struct tour &tour, const struct edge &edge);
 
 #endif

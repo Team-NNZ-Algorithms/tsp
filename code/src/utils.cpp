@@ -55,8 +55,10 @@ std::vector<edge> generate_edges(std::vector<city> &cities) {
 }
 
 struct tsp_problem read_problem(char* in_file) {
-    struct tsp_problem new_problem;
+    int num_cities = total_cities(in_file);
+    struct tsp_problem new_problem(num_cities);
     
+
     new_problem.cities = read_cities(in_file);
     new_problem.edges = generate_edges(new_problem.cities);
 
@@ -68,4 +70,11 @@ struct tsp_problem read_problem(char* in_file) {
     }
 
     return new_problem;
+}
+
+
+void add_edge_to_tour(struct tour &tour, struct edge &edge) {
+    assert(edge.start->id == tour.cities.back()->id);
+    tour.cities.push_back(edge.end);
+    tour.distance = tour.distance + edge.weight;
 }

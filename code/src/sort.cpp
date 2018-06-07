@@ -3,35 +3,9 @@
 #include <algorithm>
 #include <stdio.h>
 
-bool edge_sort (const edge &a, const edge &b) {
-    return (a.weight < b.weight);
-}
-
-void sort_edges(std::vector<edge> &edges) {
-    
-  // std::sort(edges.begin(), edges.end(), edge_sort);
-  mergeSort(edges, 0, edges.size() - 1);
-}
-
-// mergeSort
-// Takes the vector, left index and right index
-// Merges two subarrays of the passed vector
-// First is vec[l..r]
-// Second is vec[mid+1..r]
-void mergeSort(std::vector<edge> &vec, int l, int r) {
-  if (l < r)
-    {
-      int mid = l+(r-l)/2; // Equivalent to (l+r)/2, for very large values of l and r
-
-      // Left array recursion
-      mergeSort(vec, l, mid);
-
-      // Right array recursion
-      mergeSort(vec, mid+1, r);
-
-      // Merge the two subarrays
-      merge(vec, l, mid, r);
-    }
+// comparison function for edges
+bool edge_compare(const edge &a, const edge &b) {
+    return (a.weight <= b.weight);
 }
 
 // merge
@@ -62,7 +36,7 @@ void merge(std::vector<edge> &vec, int l, int mid, int r) {
     {
       // If left element is smaller or equal
       // (a.weight < b.weight);
-      if (L[i].weight <= R[j].weight)
+      if (edge_compare(L[i], R[j]))
 	{
 	  // Place in merged array
 	  vec[k] = L[i];
@@ -94,4 +68,30 @@ void merge(std::vector<edge> &vec, int l, int mid, int r) {
       j++;
       k++;
     }
+}
+
+// mergeSort
+// Takes the vector, left index and right index
+// Merges two subarrays of the passed vector
+// First is vec[l..r]
+// Second is vec[mid+1..r]
+void mergeSort(std::vector<edge> &vec, int l, int r) {
+  if (l < r)
+    {
+      int mid = l+(r-l)/2; // Equivalent to (l+r)/2, for very large values of l and r
+
+      // Left array recursion
+      mergeSort(vec, l, mid);
+
+      // Right array recursion
+      mergeSort(vec, mid+1, r);
+
+      // Merge the two subarrays
+      merge(vec, l, mid, r);
+    }
+}
+
+void sort_edges(std::vector<edge> &edges) {
+    
+  mergeSort(edges, 0, edges.size() - 1);
 }
