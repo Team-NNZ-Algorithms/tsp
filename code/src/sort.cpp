@@ -9,8 +9,8 @@ bool edge_sort (const edge &a, const edge &b) {
 
 void sort_edges(std::vector<edge> &edges) {
     
-  std::sort(edges.begin(), edges.end(), edge_sort);
-  //mergeSort(edges, 0, edges.size() - 1);
+  // std::sort(edges.begin(), edges.end(), edge_sort);
+  mergeSort(edges, 0, edges.size() - 1);
 }
 
 // mergeSort
@@ -18,7 +18,7 @@ void sort_edges(std::vector<edge> &edges) {
 // Merges two subarrays of the passed vector
 // First is vec[l..r]
 // Second is vec[mid+1..r]
-void mergeSort(std::vector<edge> vec, int l, int r) {
+void mergeSort(std::vector<edge> &vec, int l, int r) {
   if (l < r)
     {
       int mid = l+(r-l)/2; // Equivalent to (l+r)/2, for very large values of l and r
@@ -37,12 +37,12 @@ void mergeSort(std::vector<edge> vec, int l, int r) {
 // merge
 // Takes the vector, left, mid, and right index
 // Merges the two arrays vec[l..r] and vec[mid+1..r]
-void merge(std::vector<edge> vec, int l, int mid, int r) {
+void merge(std::vector<edge> &vec, int l, int mid, int r) {
   int i, j, k; // Indexes for merging
   int n1 = mid - l + 1; // First array # of elements
   int n2 = r - mid; // Second array # of elements
 
-  // Create temporary arrays
+  // Create temporary arrays of edges
   edge L[n1], R[n2];
 
   // Copy data to them
