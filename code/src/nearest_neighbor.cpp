@@ -43,6 +43,29 @@ struct tour tsp_nearest_neighbor( struct tsp_problem &problem ) {
             }
         }
 
+	// return to the starting city
+	struct city* current_city = current_tour->cities.back();
+	std::vector<edge>* current_edges = &(current_city->edges);
+	
+	for ( const struct edge &e : *current_edges ) {
+	  struct city* next_city;
+
+	  // if this edge starts with the current last city in the tour and ends with the first city
+	  if ( e.start->id == current_city->id && e.end->id == current_tour->cities[0]->id )
+	    {
+	      // add first city edge, completing the tour
+	      next_city = e.end;
+	      add_edge_to_tour(*current_tour, next_city, e.weight);
+	      break;
+	    }
+	  // or if they're in the reverse order
+	  else if ( e.start->id == current_tour->cities[0]->id && e.end->id == current_city->id ) {
+	      next_city = e.start;
+	      add_edge_to_tour(*current_tour, current_tour->cities[0], e.weight);
+	      break;
+	  }
+	}
+	
         print_tour(*current_tour);
 
         // change best_tour if this current tour is better.
