@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include <limits>
+#include <string.h>
 
 // calculate the distance between two cities
 int city_distance(const struct city &start, const struct city &end) {
@@ -71,6 +72,23 @@ void add_city_to_tour(struct tour &tour, struct city* next_city, int distance) {
 void complete_tour(struct tour &tour, std::vector<int>& adjacency) {
     int index = matrix_index(tour.cities.front()->id, tour.cities.back()->id, tour.cities.size());
     tour.distance += adjacency[index];
+}
+
+void write_tour(struct tour &best_tour, char* in_file) {
+    char out_file[30];
+    strcpy(out_file, in_file);
+    strcat(out_file, ".tour");
+    
+    FILE *fout;
+    fout = fopen(out_file, "w");
+    
+    fprintf(fout, "%d\n", best_tour.distance);
+    
+    for (const city *c : best_tour.cities) {
+      fprintf(fout, "%d\n", c->id);
+    }
+
+    fclose(fout);
 }
 
 // prints out debug info about the tour

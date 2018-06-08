@@ -43,6 +43,9 @@ int main(int argc, char** argv) {
     printf("\ngreedy cities visited: %d\n", (int) best_tour.cities.size());
     printf("best greedy distance: %d\n", best_tour.distance);
 
+    // print tour to file
+    write_tour(best_tour, in_file);
+    
     // print duration
     #if defined(_OPENMP)
     t = omp_get_wtime() - t;
