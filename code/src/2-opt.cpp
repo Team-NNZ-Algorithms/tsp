@@ -1,6 +1,6 @@
 #include "2-opt.hpp"
 #include "utils.hpp"
-
+ /*
 struct tour swap(struct tour tour, int i, int k);
 
 void checkTourDistance(struct tour &tour)
@@ -53,3 +53,5 @@ struct tour swap(struct tour tour, int i, int k)
   //    return new_route;
   return newTour;
 }
+
+*/

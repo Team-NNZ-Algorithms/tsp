@@ -1,81 +1,72 @@
 #include "nearest_neighbor.hpp"
 
+#include <stdio.h>
+
 // adapted from https://en.wikipedia.org/wiki/Nearest_neighbour_algorithm
 // asssuming that edges in the problem are already sorted!!!
 struct tour tsp_nearest_neighbor( struct tsp_problem &problem ) {
-    struct tour best_tour;
+
+    float start_time = (float) clock();
+
+    struct tour best_tour(problem.cities.size());
+    best_tour.distance = std::numeric_limits<int>::max();
+
+    int iterations = 0;
 
     // we will test greedy tours at every starting point
     for( struct city &start : problem.cities ) {
+        ++iterations;
 
-        // this will provide constant time access to see which cities have been visited
-        std::vector<bool> current_visited(problem.cities.size(), false);
+        // abort early if taking too long
+        float current_time = (float) clock();
+        float t = (current_time - start_time) / CLOCKS_PER_SEC;
+        if ( t > 60 ) {
+            printf("aborting nearest neighbor early.\n");
+            break;
+        }
 
         // create a new tour and add the first city
-        struct tour* current_tour = new struct tour;
+        struct tour* current_tour = new struct tour(problem.cities.size());
         current_tour->cities.push_back(&start);
-        current_visited[start.id] = true;
+        current_tour->visited[start.id] = true;
 
         // while the current_tour is not complete
         while( current_tour->cities.size() < problem.cities.size() ) {
 
             // starting at the current end of the tour
             struct city* current_city = current_tour->cities.back();
-            std::vector<edge>* current_edges = &(current_city->edges);
 
-            // look through the edges for the current city, which are already sorted
-            for ( const struct edge &e : *current_edges ) {
-                struct city* next_city;
+            int min = std::numeric_limits<int>::max();
+            int min_id = -1;
 
-                if ( e.start->id != current_city->id ) {
-                    next_city = e.start;
-                }
-                else {
-                    next_city = e.end;
-                }
+            // look through the edges for the current city
+            for ( int i = 0; i < problem.cities.size(); ++i ) {
+                int adj_index = matrix_index(current_city->id, i, problem.cities.size());
 
-                // if the end isn't visited, visit the end
-                if ( !current_visited[next_city->id] ) {
-                    add_edge_to_tour(*current_tour, next_city, e.weight);
-                    current_visited[next_city->id] = true;
-                    break;
+                // if this new city is not visited and is the closest so far, set the new minimum
+                if ( !current_tour->visited[i] && problem.adjacency[adj_index] < min) {
+                    min = problem.adjacency[adj_index];
+                    min_id = i;
                 }
             }
+
+            // add the closest city found
+            add_city_to_tour(*current_tour, &(problem.cities[min_id]), min);
         }
 
-	// return to the starting city
-	struct city* current_city = current_tour->cities.back();
-	std::vector<edge>* current_edges = &(current_city->edges);
-	
-	for ( const struct edge &e : *current_edges ) {
-	  struct city* next_city;
-
-	  // if this edge starts with the current last city in the tour and ends with the first city
-	  if ( e.start->id == current_city->id && e.end->id == current_tour->cities[0]->id )
-	    {
-	      // add first city edge, completing the tour
-	      next_city = e.end;
-	      add_edge_to_tour(*current_tour, next_city, e.weight);
-	      break;
-	    }
-	  // or if they're in the reverse order
-	  else if ( e.start->id == current_tour->cities[0]->id && e.end->id == current_city->id ) {
-	      next_city = e.start;
-	      add_edge_to_tour(*current_tour, current_tour->cities[0], e.weight);
-	      break;
-	  }
-	}
-	
-        print_tour(*current_tour);
+        // return to the starting city
+        complete_tour(*current_tour, problem.adjacency);
 
         // change best_tour if this current tour is better.
         if( current_tour->distance < best_tour.distance ) {
-            print_tour(*current_tour);
+            printf("iteration #%d: %d\n", iterations, current_tour->distance);
             best_tour = *current_tour;
+        } else {
+            delete current_tour;
         }
-
-        delete current_tour;
     }
+
+    printf("total iterations run: %d\n\n", iterations);
 
     return best_tour;
 }

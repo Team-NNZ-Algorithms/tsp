@@ -7,8 +7,10 @@
 #include <time.h>
 
 int main(int argc, char** argv) {
-  clock_t t;
-  t = clock();
+    printf("\n");
+
+    clock_t t;
+    t = clock();
   
     if( argc < 2 ) {
         printf("Need 1 argument: [input filename]\n");
@@ -16,24 +18,20 @@ int main(int argc, char** argv) {
     }
 
     char* in_file = argv[1];
-    printf("Input file: %s", in_file);
+    printf("Input file: %s\n", in_file);
 
+    // read problem from file
     struct tsp_problem problem = read_problem(in_file);
-    printf("cities: %d\n", (int) problem.cities.size());
-    printf("edges: %d\n", (int) problem.edges.size());
+    printf("number of cities: %d\n\n", (int) problem.cities.size());
+
+    // get greedy tour
     struct tour best_tour = tsp_nearest_neighbor(problem);
+    printf("greedy cities visited: %d\n", (int) best_tour.cities.size());
+    printf("best greedy distance: %d\n", best_tour.distance);
 
+    // print duration
     t = clock() - t;
-
-    printf("Duration: %f\n", ((float)t)/CLOCKS_PER_SEC);
-
-    // for (int i = 0; i < problem.cities.size(); ++i) {
-    //     printf("%d, %d\n", problem.cities[i].x, problem.cities[i].y);
-    // }
-
-    // for (int i = 0; i < problem.edges.size(); ++i) {
-    //     printf("%d, %d, %d\n", problem.edges[i].start->id, problem.edges[i].end->id, problem.edges[i].weight);
-    // }
+    printf("Duration: %f\n\n", ((float)t)/CLOCKS_PER_SEC);
 
     return 0;
 }

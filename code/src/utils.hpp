@@ -5,42 +5,31 @@
 
 int city_distance(const struct city &start, const struct city &end);
 
-struct edge;
-
 struct city {
     int id;
     int x, y;
-    std::vector<edge> edges;
-};
-
-struct edge {
-    struct city *start;
-    struct city *end;
-    int weight;
 };
 
 struct tour {
   std::vector<city*> cities;
+  std::vector<bool> visited;
   int distance;
 
-  tour() {
+  tour(int num_cities) {
       distance = 0;
+      visited.assign(num_cities, false);
   }
 };
 
 struct tsp_problem {
     std::vector<city> cities;
-    std::vector<edge> edges;
-
-    tsp_problem(int num_cities) {
-        cities.reserve(num_cities);
-        edges.reserve(num_cities * num_cities - num_cities);
-    }
+    std::vector<int> adjacency;
 };
 
 struct tsp_problem read_problem(char* in_file);
-void add_edge_to_tour(struct tour &tour, struct city* next_city, int distance);
-
+void add_city_to_tour(struct tour &tour, struct city* next_city, int distance);
 void print_tour(struct tour &tour);
+int matrix_index(int row, int column, int row_size);
+void complete_tour(struct tour &tour, std::vector<int>& adjacency);
 
 #endif
