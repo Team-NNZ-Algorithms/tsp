@@ -1,13 +1,11 @@
 #include "nearest_neighbor.hpp"
 
 #include <stdio.h>
-#include <ctime>
 #include <limits>
+#include <time.h>
 
 #if defined(_OPENMP)
 #include <omp.h>
-#else
-#include <time.h>
 #endif
 
 // TODO: replace clock with suggestion here: https://stackoverflow.com/questions/2962785/c-using-clock-to-measure-time-in-multi-threaded-programs
@@ -15,12 +13,10 @@
 // adapted from https://en.wikipedia.org/wiki/Nearest_neighbour_algorithm
 // asssuming that edges in the problem are already sorted!!!
 struct tour tsp_nearest_neighbor( struct tsp_problem &problem ) {
+    struct timespec start_time, finish_time;
+    double elapsed;
 
-    #if defined(_OPENMP)
-    float start_time = omp_get_wtime();
-    #else
-    float start_time = clock();
-    #endif
+    clock_gettime(CLOCK_MONOTONIC, &start_time);
 
     struct tour best_tour(problem.cities.size());
     best_tour.distance = std::numeric_limits<int>::max();
@@ -32,11 +28,9 @@ struct tour tsp_nearest_neighbor( struct tsp_problem &problem ) {
     for( unsigned starting_id = 0; starting_id < problem.cities.size(); ++starting_id ) {
 
         // only continue if clock is under 60s
-        #if defined(_OPENMP)
-        float elapsed = omp_get_wtime() - start_time;
-        #else
-        float elapsed = (clock() - start_time) / CLOCKS_PER_SEC;
-        #endif
+        clock_gettime(CLOCK_MONOTONIC, &finish_time);
+        elapsed = (finish_time.tv_sec - start_time.tv_sec);
+        elapsed += (finish_time.tv_nsec - start_time.tv_nsec) / 1000000000.0;
 
         if ( elapsed < 60 ) {
             // create a new tour and add the first city
@@ -74,14 +68,15 @@ struct tour tsp_nearest_neighbor( struct tsp_problem &problem ) {
             
             // only one thread can run this at a time
             #if defined(_OPENMP)
-            elapsed = omp_get_wtime() - start_time;
             #pragma omp critical
-            #else
-            elapsed = (clock() - start_time) / CLOCKS_PER_SEC;
             #endif
             {
                 // change best_tour if this current tour is better.
                 if( current_tour->distance < best_tour.distance ) {
+                    clock_gettime(CLOCK_MONOTONIC, &finish_time);
+                    elapsed = (finish_time.tv_sec - start_time.tv_sec);
+                    elapsed += (finish_time.tv_nsec - start_time.tv_nsec) / 1000000000.0;
+
                     printf("city: %8d, distance: %8d, elapsed: %.4fs\n", starting_id, current_tour->distance, elapsed);
                     best_tour = *current_tour;
                 } else {

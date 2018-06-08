@@ -2,6 +2,7 @@
 output/
 bin/
 perf.data*
+data/*.tour
 
 # Created by https://www.gitignore.io/api/c,vim,c++,macos,python,visualstudio,visualstudiocode
 
