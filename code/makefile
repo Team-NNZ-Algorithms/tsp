@@ -1,5 +1,6 @@
 CC=g++
-CFLAGS=-std=c++11 -Wall -O3
+CFLAGS=-std=c++11 -Wall -O3 -fopenmp
+# CFLAGS=-std=c++11 -Wall -O3
 
 SRC_DIR := src
 OBJ_DIR := bin

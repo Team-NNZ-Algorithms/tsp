@@ -4,6 +4,7 @@
 #include <cmath>
 #include <stdio.h>
 #include <assert.h>
+#include <limits>
 
 // calculate the distance between two cities
 int city_distance(const struct city &start, const struct city &end) {
@@ -38,8 +39,8 @@ void generate_adjacencies(struct tsp_problem& problem) {
     int num_edges = problem.cities.size() * problem.cities.size();
     problem.adjacency.assign(num_edges, std::numeric_limits<int>::max());
 
-    for(int i = 0; i < problem.cities.size(); ++i) {
-        for(int j = 0; j < problem.cities.size(); ++j) {
+    for(unsigned i = 0; i < problem.cities.size(); ++i) {
+        for(unsigned j = 0; j < problem.cities.size(); ++j) {
             int index = matrix_index(i, j, problem.cities.size());
             if( i != j ) {
                 problem.adjacency[index] = city_distance(problem.cities[i], problem.cities[j]);
