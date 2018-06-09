@@ -3,8 +3,12 @@
 # Contributors
 
 - Nathan Perkins
-- Zi Wei Li
+- Ziwei Wu
 - Eric Newton
+
+# Results
+
+- Per instructions, we have provided solutions for unlimited runtime and three minute limited runtime in separate folders.
 
 # Usage
 
