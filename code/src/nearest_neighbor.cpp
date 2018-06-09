@@ -60,11 +60,11 @@ struct tour tsp_nearest_neighbor( struct tsp_problem &problem ) {
                 }
 
                 // add the closest city found
-                add_city_to_tour(*current_tour, &(problem.cities[min_id]), min);
+                add_city_to_tour(*current_tour, &(problem.cities[min_id]), problem);
             }
 
             // return to the starting city
-            complete_tour(*current_tour, problem.adjacency);
+            complete_tour(*current_tour, problem);
             
             // only one thread can run this at a time
             #if defined(_OPENMP)
@@ -86,5 +86,6 @@ struct tour tsp_nearest_neighbor( struct tsp_problem &problem ) {
         }
     }
 
+    printf("\n");
     return best_tour;
 }

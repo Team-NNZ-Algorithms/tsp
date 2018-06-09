@@ -27,10 +27,12 @@ struct tsp_problem {
 };
 
 struct tsp_problem read_problem(char* in_file);
-void add_city_to_tour(struct tour &tour, struct city* next_city, int distance);
 void print_tour(struct tour &tour);
-int matrix_index(int row, int column, int row_size);
-void complete_tour(struct tour &tour, std::vector<int>& adjacency);
 void write_tour(struct tour &best_tour, char* in_file);
+
+int matrix_index(int row, int column, int row_size);
+
+void add_city_to_tour(struct tour &tour, struct city* next_city, const struct tsp_problem &problem);
+void complete_tour(struct tour &tour, const struct tsp_problem &problem);
 
 #endif

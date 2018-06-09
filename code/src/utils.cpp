@@ -62,18 +62,23 @@ struct tsp_problem read_problem(char* in_file) {
 }
 
 // adds a city to the tour and re-calculates the distance
-void add_city_to_tour(struct tour &tour, struct city* next_city, int distance) {
+void add_city_to_tour(struct tour &tour, struct city* next_city, const struct tsp_problem &problem) {
+    if( tour.cities.size() != 0 ) {
+        int adj_index = matrix_index(tour.cities.back()->id, next_city->id, problem.cities.size());
+        tour.distance += problem.adjacency[adj_index];
+    }
+        
     tour.cities.push_back(next_city);
     tour.visited[next_city->id] = true;
-    tour.distance += distance;
 }
 
 // adds the final leg of the tour
-void complete_tour(struct tour &tour, std::vector<int>& adjacency) {
+void complete_tour(struct tour &tour, const struct tsp_problem &problem) {
     int index = matrix_index(tour.cities.front()->id, tour.cities.back()->id, tour.cities.size());
-    tour.distance += adjacency[index];
+    tour.distance += problem.adjacency[index];
 }
 
+// write the tour out to a file
 void write_tour(struct tour &best_tour, char* in_file) {
     char out_file[30];
     strcpy(out_file, in_file);

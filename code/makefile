@@ -23,4 +23,5 @@ run: tsp.out data/tsp_example_1.txt
 
 clean:
 	rm -Rf bin/
-	rm -Rf *.out
+	rm -Rf *.out*
+	rm -Rf data/*.tour

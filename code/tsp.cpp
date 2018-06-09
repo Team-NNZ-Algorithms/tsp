@@ -43,18 +43,25 @@ int main(int argc, char** argv) {
     #endif
 
     struct tour best_tour = tsp_nearest_neighbor(problem);
-    printf("\ngreedy cities visited: %d\n", (int) best_tour.cities.size());
+    int greedy_distance = best_tour.distance;
     printf("best greedy distance : %d\n", best_tour.distance);
-
-    // print tour to file
-    write_tour(best_tour, in_file);
-    
-    // print duration
     clock_gettime(CLOCK_MONOTONIC, &finish);
     elapsed = (finish.tv_sec - start.tv_sec);
     elapsed += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
+    printf("duration after greedy: %.4fs\n\n", elapsed);
 
-    printf("total duration       : %.4fs\n\n", elapsed);
+    printf("running 2-opt with 1 thread\n");
+    two_opt(best_tour, problem);
+    int two_opt_distance = best_tour.distance;
+    printf("2-opt distance   : %d\n", best_tour.distance);
+    printf("2-opt improvement: %.2f%%\n", (float) greedy_distance / two_opt_distance - 1);
+    clock_gettime(CLOCK_MONOTONIC, &finish);
+    elapsed = (finish.tv_sec - start.tv_sec);
+    elapsed += (finish.tv_nsec - start.tv_nsec) / 1000000000.0;
+    printf("total duration   : %.4fs\n\n", elapsed);
+
+    // print tour to file
+    write_tour(best_tour, in_file);
 
     return 0;
 }
